@@ -445,51 +445,104 @@
 
     document.getElementById('admin-panel').addEventListener('click', function(e){ if(e.target===this) closeAdmin(); });
 
-    // GALLERY — with localStorage persistence
+    // GALLERY — Cloudinary shared gallery (visible on all devices)
+    var CLOUD_NAME   = 'dj1pgebyt';
+    var UPLOAD_PRESET = 'Freshers2026';
     var photos = [], currentLb = 0;
     var fileInput = document.getElementById('gallery-file-input');
     var grid      = document.getElementById('gallery-grid');
     var empty     = document.getElementById('gallery-empty');
     var countEl   = document.getElementById('gallery-count');
 
-    // Load saved photos on page load
-    try { var sp=localStorage.getItem('fd26_gallery'); if(sp) photos=JSON.parse(sp); } catch(e){ photos=[]; }
-    renderGallery();
+    // Load all photos from Cloudinary on page load
+    function loadGallery() {
+      countEl.textContent = 'Loading photos...';
+      fetch('https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/freshers26.json')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          photos = (data.resources || []).map(function(r){
+            return {
+              src: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_800,q_auto,f_auto/' + r.public_id + '.jpg',
+              thumb: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_400,h_400,c_fill,q_auto,f_auto/' + r.public_id + '.jpg',
+              name: r.public_id.replace('freshers26/','').replace(/_/g,' ')
+            };
+          });
+          renderGallery();
+        })
+        .catch(function(){
+          // Fallback: show empty state
+          photos = [];
+          renderGallery();
+        });
+    }
 
-    function saveGallery() {
-      try { localStorage.setItem('fd26_gallery', JSON.stringify(photos)); }
-      catch(e) { alert('Storage full! Try uploading fewer or smaller photos.'); }
+    // Upload a single file to Cloudinary
+    function uploadToCloudinary(file, callback) {
+      var formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', 'freshers26');
+      formData.append('tags', 'freshers26');
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload');
+      xhr.onload = function() {
+        var res = JSON.parse(xhr.responseText);
+        if (res.secure_url) callback(null, res);
+        else callback('Upload failed');
+      };
+      xhr.onerror = function(){ callback('Network error'); };
+      xhr.send(formData);
     }
 
     fileInput.addEventListener('change', function() {
-      Array.from(this.files).forEach(function(file) {
-        if (!file.type.startsWith('image/')) return;
-        var r = new FileReader();
-        r.onload = function(ev) {
-          photos.push({ src: ev.target.result, name: file.name.replace(/\.[^.]+$/,'') });
-          saveGallery();
-          renderGallery();
-        };
-        r.readAsDataURL(file);
+      var files = Array.from(this.files).filter(function(f){ return f.type.startsWith('image/'); });
+      if (!files.length) return;
+      var uploaded = 0;
+      var btn = document.querySelector('.gallery-upload-btn');
+      btn.textContent = 'Uploading 0 / ' + files.length + '...';
+      btn.disabled = true;
+
+      files.forEach(function(file) {
+        uploadToCloudinary(file, function(err, res) {
+          uploaded++;
+          btn.textContent = 'Uploading ' + uploaded + ' / ' + files.length + '...';
+          if (!err) {
+            photos.unshift({
+              src: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_800,q_auto,f_auto/' + res.public_id + '.jpg',
+              thumb: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_400,h_400,c_fill,q_auto,f_auto/' + res.public_id + '.jpg',
+              name: file.name.replace(/\.[^.]+$/,'')
+            });
+            renderGallery();
+          }
+          if (uploaded === files.length) {
+            btn.textContent = '📸 Upload Your Photos';
+            btn.disabled = false;
+          }
+        });
       });
       fileInput.value = '';
     });
 
     function renderGallery() {
       grid.innerHTML = '';
-      if (!photos.length) { grid.appendChild(empty); countEl.textContent=''; return; }
-      photos.forEach(function(p,i) {
+      if (!photos.length) {
+        grid.appendChild(empty);
+        countEl.textContent = '';
+        return;
+      }
+      photos.forEach(function(p, i) {
         var item = document.createElement('div');
         item.className = 'gallery-item';
-        item.innerHTML = '<img src="'+p.src+'" alt="'+p.name+'" loading="lazy"><div class="photo-name">'+p.name+'</div><button class="remove-btn">✕</button>';
+        item.innerHTML = '<img src="'+p.thumb+'" alt="'+p.name+'" loading="lazy"><div class="photo-name">'+p.name+'</div>';
         item.querySelector('img').onclick = function(){ openLightbox(i); };
-        item.querySelector('.remove-btn').onclick = function(ev){
-          ev.stopPropagation(); photos.splice(i,1); saveGallery(); renderGallery();
-        };
         grid.appendChild(item);
       });
-      countEl.textContent = photos.length+' photo'+(photos.length!==1?'s':'')+' in the gallery';
+      countEl.textContent = photos.length + ' photo' + (photos.length !== 1 ? 's' : '') + ' shared';
     }
+
+    // Load gallery on start
+    loadGallery();
 
     var lb    = document.getElementById('lightbox');
     var lbImg = document.getElementById('lb-img');
@@ -509,10 +562,24 @@
     gs.ondragleave = function(){ gs.style.outline=''; };
     gs.ondrop = function(e){
       e.preventDefault(); gs.style.outline='';
-      Array.from(e.dataTransfer.files).filter(function(f){return f.type.startsWith('image/');}).forEach(function(file){
-        var r=new FileReader();
-        r.onload=function(ev){ photos.push({src:ev.target.result,name:file.name.replace(/\.[^.]+$/,'')}); saveGallery(); renderGallery(); };
-        r.readAsDataURL(file);
+      var files = Array.from(e.dataTransfer.files).filter(function(f){ return f.type.startsWith('image/'); });
+      if (!files.length) return;
+      var btn = document.querySelector('.gallery-upload-btn');
+      btn.textContent = 'Uploading...'; btn.disabled = true;
+      var done = 0;
+      files.forEach(function(file){
+        uploadToCloudinary(file, function(err, res){
+          done++;
+          if (!err) {
+            photos.unshift({
+              src: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_800,q_auto,f_auto/' + res.public_id + '.jpg',
+              thumb: 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_400,h_400,c_fill,q_auto,f_auto/' + res.public_id + '.jpg',
+              name: file.name.replace(/\.[^.]+$/,'')
+            });
+            renderGallery();
+          }
+          if (done === files.length){ btn.textContent='📸 Upload Your Photos'; btn.disabled=false; }
+        });
       });
     };
 
