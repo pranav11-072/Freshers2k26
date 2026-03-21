@@ -128,10 +128,48 @@
   .success-msg { display: none; text-align: center; padding: 2rem; color: var(--teal); font-size: 1.1rem; font-weight: 600; }
   footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 2.5rem 2rem; font-size: 0.875rem; }
   footer span { color: var(--gold); }
+  /* ── GOOGLE DRIVE SECTION ── */
+  .drive-section { margin-top: 3rem; }
+  .drive-card {
+    display: flex; gap: 2.5rem; align-items: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px; padding: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .drive-left { flex: 1; min-width: 260px; }
+  .drive-right { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+  .drive-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .drive-title { font-family: 'Abril Fatface', cursive; font-size: 1.6rem; color: #fff; margin-bottom: 0.75rem; }
+  .drive-desc { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 1.5rem; }
+  .drive-btn {
+    display: inline-block; text-decoration: none;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #fff; font-weight: 700; font-size: 0.9rem;
+    padding: 0.8rem 1.8rem; border-radius: 100px;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .drive-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,184,0,0.35); }
+  .drive-hint {
+    margin-top: 1rem; font-size: 0.75rem;
+    color: rgba(255,184,0,0.6); line-height: 1.5;
+  }
+  .drive-hint strong { color: rgba(255,184,0,0.9); }
+  .qr-box {
+    width: 180px; height: 180px;
+    background: #fff; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .qr-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+  .qr-placeholder { text-align: center; color: rgba(45,20,0,0.4); font-size: 0.78rem; }
+  .qr-label { font-size: 0.8rem; color: rgba(255,255,255,0.4); text-align: center; }
+
   @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .js-loaded .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .js-loaded .reveal.visible { opacity: 1; transform: translateY(0); }
-  @media (max-width: 700px) { nav { padding: 1rem 1.25rem; } .nav-links { display: none; } .form-row { grid-template-columns: 1fr; } .gallery-grid { grid-template-columns: repeat(2, 1fr); } .register-wrap { padding: 1.75rem 1.25rem; } .schedule-item { grid-template-columns: 90px 1fr; } }
+  @media (max-width: 700px) { nav { padding: 1rem 1.25rem; } .nav-links { display: none; } .form-row { grid-template-columns: 1fr; } .gallery-grid { grid-template-columns: repeat(2, 1fr); } .register-wrap { padding: 1.75rem 1.25rem; } .schedule-item { grid-template-columns: 90px 1fr; } .drive-card { flex-direction: column; } .drive-right { width: 100%; } }
 </style>
 </head>
 <body>
@@ -211,6 +249,34 @@
       <div class="gallery-empty" id="gallery-empty"><div>🖼️</div><p>No photos yet — be the first to share a memory!</p><p style="font-size:0.8rem;margin-top:0.3rem;">Click "Upload Your Photos" above</p></div>
     </div>
     <p class="gallery-count" id="gallery-count"></p>
+
+    <!-- GOOGLE DRIVE SHARE SECTION -->
+    <div class="drive-section reveal">
+      <div class="drive-card">
+        <div class="drive-left">
+          <div class="drive-icon">📁</div>
+          <h3 class="drive-title">Share to Google Drive</h3>
+          <p class="drive-desc">Scan the QR code or tap the button below to upload your photos directly to our shared Google Drive folder — accessible by everyone!</p>
+          <a href="YOUR_GOOGLE_DRIVE_LINK_HERE" target="_blank" class="drive-btn" id="drive-link">
+            Open Google Drive Folder →
+          </a>
+          <p class="drive-hint">📌 Replace <strong>YOUR_GOOGLE_DRIVE_LINK_HERE</strong> in the code with your actual Drive link</p>
+        </div>
+        <div class="drive-right">
+          <div class="qr-box" id="qr-box">
+            <div class="qr-placeholder">
+              <div style="font-size:3rem;">📷</div>
+              <p>QR Code</p>
+              <p style="font-size:0.75rem;opacity:0.6;margin-top:0.3rem;">Replace with your QR image</p>
+            </div>
+            <!-- Once you have the QR code image, replace the div above with: -->
+            <!-- <img src="your-qr-code.png" alt="Scan to open Drive"> -->
+          </div>
+          <p class="qr-label">Scan to upload photos</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
