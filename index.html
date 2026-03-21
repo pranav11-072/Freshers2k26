@@ -94,6 +94,7 @@
     font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
     padding: 0.4rem 1.2rem; border-radius: 100px;
     margin-bottom: 1.5rem;
+    box-shadow: 0 0 0 0 rgba(255,184,0,0.4);
     animation: pulse-badge 2s ease-in-out infinite;
   }
   @keyframes pulse-badge {
@@ -111,26 +112,20 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 0.4em;
-    animation: title-in 0.8s cubic-bezier(0.22,1,0.36,1) both;
   }
-  @keyframes title-in {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   .hero-subtitle {
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: clamp(1.1rem, 3vw, 1.6rem);
     color: var(--text); opacity: 0.6;
     margin-bottom: 2rem;
-    animation: title-in 0.8s 0.15s cubic-bezier(0.22,1,0.36,1) both;
   }
-
   .hero-meta {
     display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
     margin-bottom: 2.5rem;
-    animation: title-in 0.8s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .hero-cta-group {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
   }
   .hero-meta-item {
     display: flex; align-items: center; gap: 0.5rem;
@@ -145,10 +140,6 @@
   .icon-pink { background: rgba(255,45,107,0.12); }
   .icon-teal { background: rgba(0,201,167,0.12); }
 
-  .hero-cta-group {
-    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    animation: title-in 0.8s 0.35s cubic-bezier(0.22,1,0.36,1) both;
-  }
   .btn-primary {
     background: linear-gradient(135deg, var(--saffron), var(--pink));
     color: #fff; border: none;
@@ -484,8 +475,8 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .js-loaded .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .js-loaded .reveal.visible { opacity: 1; transform: translateY(0); }
 
   /* ── MOBILE ── */
   @media (max-width: 700px) {
@@ -810,75 +801,22 @@
 <!-- FOOTER -->
 <footer>
   <p>Made with <span>♥</span> for the Class of 2026 · <span>Nagarjuna College Of Engineering and Technology</span></p>
-  <p style="margin-top:0.5rem; font-size:0.78rem;">For queries, contact the Cultural Committee · 1nc23cs123@ncetmail.com · 1nc23cs132@ncetmail.com</p>
+  <p style="margin-top:0.5rem; font-size:0.78rem;">For queries, contact the Cultural Committee · 1nc23cs123&#64;ncetmail.com · 1nc23cs132&#64;ncetmail.com</p>
 </footer>
 
 <script>
-  // Countdown
-  const eventDate = new Date('2026-04-22T09:00:00').getTime();
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = eventDate - now;
-    if (diff <= 0) {
-      document.getElementById('countdown-section').innerHTML = '<p style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Abril Fatface">🎉 Fresher\'s Day \'26 is LIVE! Welcome, Freshers!</p>';
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-    document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
-    document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
-
-  // ── REGISTRATIONS ──
-  const ADMIN_PASSWORD = 'ncet2026'; // Change this to your own password
-  let registrations = JSON.parse(localStorage.getItem('fd26_registrations') || '[]');
+  // ── ALL GLOBALS (accessible by onclick attributes) ──
+  var registrations = [];
+  try { registrations = JSON.parse(localStorage.getItem('fd26_reg') || '[]'); } catch(e) {}
 
   function saveRegistrations() {
-    try { localStorage.setItem('fd26_registrations', JSON.stringify(registrations)); } catch(e) {}
+    try { localStorage.setItem('fd26_reg', JSON.stringify(registrations)); } catch(e) {}
   }
 
-  // Form submit
-  document.getElementById('reg-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const entry = {
-      timestamp: new Date().toLocaleString('en-IN'),
-      firstName: document.getElementById('f-fname').value.trim(),
-      lastName:  document.getElementById('f-lname').value.trim(),
-      usn:       document.getElementById('f-usn').value.trim().toUpperCase(),
-      phone:     document.getElementById('f-phone').value.trim(),
-      email:     document.getElementById('f-email').value.trim(),
-      department:document.getElementById('f-dept').value,
-      event:     document.getElementById('f-event').value || 'Just attending',
-      message:   document.getElementById('f-msg').value.trim()
-    };
-    registrations.push(entry);
-    saveRegistrations();
-    this.style.display = 'none';
-    document.getElementById('success-msg').style.display = 'block';
-  });
+  var ADMIN_PASS = 'ncet2026';
 
-  // ── ADMIN ──
-  const ADMIN_PASS = 'ncet2026';
   function checkPass() {
-    const val = document.getElementById('admin-pass').value;
+    var val = document.getElementById('admin-pass').value;
     if (val === ADMIN_PASS) {
       document.getElementById('admin-login').style.display = 'none';
       document.getElementById('admin-err').style.display = 'none';
@@ -892,33 +830,30 @@
 
   function showAdminStats() {
     document.getElementById('stat-total').textContent = registrations.length;
-    if (registrations.length === 0) {
-      document.getElementById('stat-event').textContent = '—';
-      return;
-    }
-    const counts = {};
-    registrations.forEach(r => { counts[r.event] = (counts[r.event] || 0) + 1; });
-    const top = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
+    if (registrations.length === 0) { document.getElementById('stat-event').textContent = '—'; return; }
+    var counts = {};
+    registrations.forEach(function(r) { counts[r.event] = (counts[r.event] || 0) + 1; });
+    var top = Object.entries(counts).sort(function(a,b){ return b[1]-a[1]; })[0];
     document.getElementById('stat-event').textContent = top ? top[0] + ' (' + top[1] + ')' : '—';
   }
 
   function downloadCSV() {
     if (registrations.length === 0) { alert('No registrations yet!'); return; }
-    const headers = ['Timestamp','First Name','Last Name','USN','Phone','Email','Department','Event','Message'];
-    const rows = registrations.map(r => [
-      r.timestamp, r.firstName, r.lastName, r.usn,
-      r.phone, r.email, r.department, r.event, r.message
-    ].map(v => '"' + String(v || '').replace(/"/g, '""') + '"').join(','));
-    const csv = [headers.join(','), ...rows].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const a = document.createElement('a');
+    var headers = ['Timestamp','First Name','Last Name','USN','Phone','Email','Department','Event','Message'];
+    var rows = registrations.map(function(r) {
+      return [r.timestamp,r.firstName,r.lastName,r.usn,r.phone,r.email,r.department,r.event,r.message]
+        .map(function(v){ return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(',');
+    });
+    var csv = [headers.join(',')].concat(rows).join('\n');
+    var blob = new Blob([csv],{type:'text/csv'});
+    var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'FreshersDay26_Registrations.csv';
     a.click();
   }
 
   function clearData() {
-    if (!confirm('Are you sure? This will delete ALL ' + registrations.length + ' registrations permanently.')) return;
+    if (!confirm('Delete ALL ' + registrations.length + ' registrations permanently?')) return;
     registrations = [];
     saveRegistrations();
     showAdminStats();
@@ -933,96 +868,120 @@
     document.getElementById('admin-err').style.display = 'none';
   }
 
-  document.getElementById('admin-panel').addEventListener('click', function(e) {
-    if (e.target === this) closeAdmin();
-  });
+  document.addEventListener('DOMContentLoaded', function() {
 
-  // ── GALLERY ──
-  let photos = []; // { src, name }
-  let currentLb = 0;
-
-  const fileInput = document.getElementById('gallery-file-input');
-  const grid = document.getElementById('gallery-grid');
-  const empty = document.getElementById('gallery-empty');
-  const countEl = document.getElementById('gallery-count');
-
-  fileInput.addEventListener('change', function() {
-    const files = Array.from(this.files);
-    if (!files.length) return;
-    files.forEach(file => {
-      if (!file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        photos.push({ src: e.target.result, name: file.name.replace(/\.[^.]+$/, '') });
-        renderGallery();
-      };
-      reader.readAsDataURL(file);
-    });
-    this.value = '';
-  });
-
-  function renderGallery() {
-    grid.innerHTML = '';
-    if (photos.length === 0) {
-      grid.appendChild(empty);
-      countEl.textContent = '';
-      return;
+    // COUNTDOWN
+    var eventDate = new Date('2026-04-22T09:00:00').getTime();
+    function updateCountdown() {
+      var diff = eventDate - Date.now();
+      if (diff <= 0) {
+        document.getElementById('countdown-section').innerHTML = '<p style="color:#fff;font-size:1.5rem;font-weight:700;text-align:center;padding:1rem;">Fresher\'s Day \'26 is LIVE! Welcome!</p>';
+        return;
+      }
+      document.getElementById('cd-days').textContent  = String(Math.floor(diff/86400000)).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
     }
-    photos.forEach((photo, i) => {
-      const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = `
-        <img src="${photo.src}" alt="${photo.name}" loading="lazy">
-        <div class="photo-name">${photo.name}</div>
-        <button class="remove-btn" title="Remove">✕</button>
-      `;
-      item.querySelector('img').addEventListener('click', () => openLightbox(i));
-      item.querySelector('.photo-name').addEventListener('click', () => openLightbox(i));
-      item.querySelector('.remove-btn').addEventListener('click', ev => {
-        ev.stopPropagation();
-        photos.splice(i, 1);
-        renderGallery();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // SCROLL REVEAL
+    document.body.classList.add('js-loaded');
+    var reveals = document.querySelectorAll('.reveal');
+    if (window.IntersectionObserver) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e,i) {
+          if (e.isIntersecting) {
+            setTimeout(function(){ e.target.classList.add('visible'); }, i*80);
+            obs.unobserve(e.target);
+          }
+        });
+      }, {threshold:0.1});
+      reveals.forEach(function(r){ obs.observe(r); });
+    } else {
+      reveals.forEach(function(r){ r.classList.add('visible'); });
+    }
+
+    // REGISTRATION FORM
+    document.getElementById('reg-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      registrations.push({
+        timestamp:  new Date().toLocaleString('en-IN'),
+        firstName:  document.getElementById('f-fname').value.trim(),
+        lastName:   document.getElementById('f-lname').value.trim(),
+        usn:        document.getElementById('f-usn').value.trim().toUpperCase(),
+        phone:      document.getElementById('f-phone').value.trim(),
+        email:      document.getElementById('f-email').value.trim(),
+        department: document.getElementById('f-dept').value,
+        event:      document.getElementById('f-event').value || 'Just attending',
+        message:    document.getElementById('f-msg').value.trim()
       });
-      grid.appendChild(item);
+      saveRegistrations();
+      this.style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
     });
-    countEl.textContent = photos.length + ' photo' + (photos.length !== 1 ? 's' : '') + ' in the gallery';
-  }
 
-  // Lightbox
-  const lightbox = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lb-img');
-  const lbCaption = document.getElementById('lb-caption');
+    // ADMIN BACKDROP
+    document.getElementById('admin-panel').addEventListener('click', function(e) {
+      if (e.target === this) closeAdmin();
+    });
 
-  function openLightbox(i) {
-    currentLb = i;
-    lbImg.src = photos[i].src;
-    lbCaption.textContent = photos[i].name + ' · ' + (i + 1) + ' / ' + photos.length;
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    lightbox.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('lb-close').addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-  document.getElementById('lb-prev').addEventListener('click', () => {
-    currentLb = (currentLb - 1 + photos.length) % photos.length;
-    openLightbox(currentLb);
-  });
-  document.getElementById('lb-next').addEventListener('click', () => {
-    currentLb = (currentLb + 1) % photos.length;
-    openLightbox(currentLb);
-  });
-  document.addEventListener('keydown', e => {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
-    if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
-  });
+    // GALLERY
+    var photos = [], currentLb = 0;
+    var fileInput = document.getElementById('gallery-file-input');
+    var grid = document.getElementById('gallery-grid');
+    var empty = document.getElementById('gallery-empty');
+    var countEl = document.getElementById('gallery-count');
 
-  // Drag-and-drop onto gallery section
-  const gallerySection = document.getElementById('gallery');
-  gallerySection.addEventListener('dragover', e => { e.preventDefault(); gallerySection.style.outline = '2px dashed rgba(255,107,0,0.5)'; });
-  gallerySection.addEventListener('dragleave', () => { gallerySection.style.outline = ''; });
-  gallerySection.addEventListene
+    fileInput.addEventListener('change', function() {
+      Array.from(this.files).forEach(function(file) {
+        if (!file.type.startsWith('image/')) return;
+        var r = new FileReader();
+        r.onload = function(ev) { photos.push({src:ev.target.result,name:file.name.replace(/\.[^.]+$/,'')}); renderGallery(); };
+        r.readAsDataURL(file);
+      });
+      fileInput.value = '';
+    });
+
+    function renderGallery() {
+      grid.innerHTML = '';
+      if (!photos.length) { grid.appendChild(empty); countEl.textContent=''; return; }
+      photos.forEach(function(p,i) {
+        var item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = '<img src="'+p.src+'" alt="'+p.name+'" loading="lazy"><div class="photo-name">'+p.name+'</div><button class="remove-btn">✕</button>';
+        item.querySelector('img').onclick = function(){ openLightbox(i); };
+        item.querySelector('.remove-btn').onclick = function(ev){ ev.stopPropagation(); photos.splice(i,1); renderGallery(); };
+        grid.appendChild(item);
+      });
+      countEl.textContent = photos.length+' photo'+(photos.length!==1?'s':'')+' in the gallery';
+    }
+
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lb-img');
+    var lbCap = document.getElementById('lb-caption');
+
+    function openLightbox(i) { currentLb=i; lbImg.src=photos[i].src; lbCap.textContent=photos[i].name+' · '+(i+1)+' / '+photos.length; lb.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeLightbox() { lb.classList.remove('open'); document.body.style.overflow=''; }
+
+    document.getElementById('lb-close').onclick = closeLightbox;
+    lb.onclick = function(e){ if(e.target===lb) closeLightbox(); };
+    document.getElementById('lb-prev').onclick = function(){ currentLb=(currentLb-1+photos.length)%photos.length; openLightbox(currentLb); };
+    document.getElementById('lb-next').onclick = function(){ currentLb=(currentLb+1)%photos.length; openLightbox(currentLb); };
+    document.onkeydown = function(e){ if(!lb.classList.contains('open')) return; if(e.key==='Escape') closeLightbox(); if(e.key==='ArrowLeft') document.getElementById('lb-prev').click(); if(e.key==='ArrowRight') document.getElementById('lb-next').click(); };
+
+    var gs = document.getElementById('gallery');
+    gs.ondragover = function(e){ e.preventDefault(); gs.style.outline='2px dashed rgba(255,107,0,0.5)'; };
+    gs.ondragleave = function(){ gs.style.outline=''; };
+    gs.ondrop = function(e){
+      e.preventDefault(); gs.style.outline='';
+      Array.from(e.dataTransfer.files).filter(function(f){return f.type.startsWith('image/');}).forEach(function(file){
+        var r=new FileReader(); r.onload=function(ev){photos.push({src:ev.target.result,name:file.name.replace(/\.[^.]+$/,'')}); renderGallery();}; r.readAsDataURL(file);
+      });
+    };
+
+  }); // end DOMContentLoaded
+</script>
+</body>
+</html>
