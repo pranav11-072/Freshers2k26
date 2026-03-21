@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresher's Day '26 — Your College Name</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --saffron: #FF6B00;
+    --gold: #FFB800;
+    --pink: #FF2D6B;
+    --teal: #00C9A7;
+    --cream: #FFF8EE;
+    --dark: #1A0A00;
+    --text: #2D1400;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(255,248,238,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1.5px solid rgba(255,107,0,0.15);
+  }
+  .nav-logo {
+    font-family: 'Abril Fatface', cursive;
+    font-size: 1.5rem;
+    color: var(--saffron);
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    color: var(--text); opacity: 0.7; transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--saffron); }
+  .nav-cta {
+    background: var(--saffron); color: #fff;
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 100px; font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.35); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* confetti dots bg */
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, #FF6B0022 2px, transparent 2px),
+      radial-gradient(circle, #FFB80033 2px, transparent 2px),
+      radial-gradient(circle, #FF2D6B22 2px, transparent 2px),
+      radial-gradient(circle, #00C9A722 2px, transparent 2px);
+    background-size: 60px 60px, 90px 90px, 75px 75px, 120px 120px;
+    background-position: 0 0, 30px 30px, 15px 45px, 60px 15px;
+    animation: float-bg 20s linear infinite;
+    opacity: 0.6;
+  }
+
+  @keyframes float-bg {
+    0% { background-position: 0 0, 30px 30px, 15px 45px, 60px 15px; }
+    100% { background-position: 0 -60px, 30px -30px, 15px -15px, 60px -45px; }
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    color: #fff;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
+    padding: 0.4rem 1.2rem; border-radius: 100px;
+    margin-bottom: 1.5rem;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,184,0,0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(255,184,0,0); }
+  }
+
+  .hero-title {
+    font-family: 'Abril Fatface', cursive;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--saffron) 0%, var(--pink) 50%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.4em;
+    animation: title-in 0.8s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes title-in {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--text); opacity: 0.6;
+    margin-bottom: 2rem;
+    animation: title-in 0.8s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .hero-meta {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    animation: title-in 0.8s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.95rem; font-weight: 500; color: var(--text); opacity: 0.75;
+  }
+  .hero-meta-item .icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .icon-saffron { background: rgba(255,107,0,0.12); }
+  .icon-pink { background: rgba(255,45,107,0.12); }
+  .icon-teal { background: rgba(0,201,167,0.12); }
+
+  .hero-cta-group {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: title-in 0.8s 0.35s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--saffron), var(--pink));
+    color: #fff; border: none;
+    padding: 0.85rem 2.2rem; border-radius: 100px;
+    font-size: 1rem; font-weight: 600; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,45,107,0.35); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text); border: 1.5px solid rgba(45,20,0,0.2);
+    padding: 0.85rem 2.2rem; border-radius: 100px;
+    font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--saffron); background: rgba(255,107,0,0.05); }
+
+  /* ── COUNTDOWN ── */
+  #countdown-section {
+    background: linear-gradient(135deg, var(--saffron) 0%, var(--pink) 100%);
+    padding: 3rem 2rem; text-align: center; color: #fff;
+  }
+  .countdown-label { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: 1rem; text-transform: uppercase; }
+  .countdown-grid { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+  .countdown-unit {
+    background: rgba(255,255,255,0.15); border-radius: 16px;
+    padding: 1.2rem 1.8rem; min-width: 90px;
+    backdrop-filter: blur(8px);
+  }
+  .countdown-num { font-family: 'Abril Fatface', cursive; font-size: 3rem; line-height: 1; }
+  .countdown-unit-label { font-size: 0.75rem; opacity: 0.75; margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 5rem 2rem; }
+  .section-header { text-align: center; margin-bottom: 3.5rem; }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--saffron); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Abril Fatface', cursive;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    line-height: 1.05; letter-spacing: -0.02em;
+    color: var(--dark);
+  }
+  .section-desc { font-size: 1.05rem; color: var(--text); opacity: 0.6; max-width: 520px; margin: 0.75rem auto 0; line-height: 1.7; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ── SCHEDULE ── */
+  #schedule { background: #fff; }
+  .schedule-grid { display: grid; gap: 0; }
+  .schedule-item {
+    display: grid; grid-template-columns: 120px 1fr;
+    gap: 0 2rem; padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(45,20,0,0.08);
+    animation: fade-in 0.5s both;
+  }
+  .schedule-item:last-child { border-bottom: none; }
+  .schedule-time {
+    font-size: 0.85rem; font-weight: 700; color: var(--saffron);
+    padding-top: 0.2rem; letter-spacing: 0.03em;
+  }
+  .schedule-content { }
+  .schedule-event { font-weight: 600; font-size: 1.05rem; color: var(--dark); margin-bottom: 0.2rem; }
+  .schedule-note { font-size: 0.85rem; color: var(--text); opacity: 0.55; }
+  .schedule-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 100px;
+    margin-left: 0.5rem; vertical-align: middle;
+  }
+  .tag-perf { background: rgba(255,45,107,0.12); color: var(--pink); }
+  .tag-game { background: rgba(0,201,167,0.12); color: var(--teal); }
+  .tag-ceremony { background: rgba(255,184,0,0.15); color: #B57800; }
+  .tag-food { background: rgba(255,107,0,0.12); color: var(--saffron); }
+
+  /* ── EVENTS ── */
+  #events { background: var(--cream); }
+  .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .event-card {
+    background: #fff; border-radius: 20px; padding: 2rem;
+    border: 1.5px solid rgba(45,20,0,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .event-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .event-card:nth-child(1)::before { background: linear-gradient(90deg, var(--saffron), var(--gold)); }
+  .event-card:nth-child(2)::before { background: linear-gradient(90deg, var(--pink), #FF8DC7); }
+  .event-card:nth-child(3)::before { background: linear-gradient(90deg, var(--teal), #7CF0DE); }
+  .event-card:nth-child(4)::before { background: linear-gradient(90deg, #8B5CF6, #C4B5FD); }
+  .event-card:nth-child(5)::before { background: linear-gradient(90deg, var(--gold), var(--saffron)); }
+  .event-card:nth-child(6)::before { background: linear-gradient(90deg, var(--pink), var(--saffron)); }
+  .event-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+  .event-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+  .event-name { font-family: 'Abril Fatface', cursive; font-size: 1.4rem; color: var(--dark); margin-bottom: 0.5rem; }
+  .event-desc { font-size: 0.9rem; color: var(--text); opacity: 0.6; line-height: 1.6; margin-bottom: 1rem; }
+  .event-detail { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; color: var(--saffron); }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--dark); color: #fff; }
+  #gallery .section-title { color: #fff; }
+  #gallery .section-tag { color: var(--gold); }
+  #gallery .section-desc { color: rgba(255,255,255,0.5); }
+
+  .gallery-upload-btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, var(--saffron), var(--pink));
+    color: #fff; border: none; border-radius: 100px;
+    padding: 0.85rem 2rem; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .gallery-upload-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,45,107,0.35); }
+  #gallery-file-input { display: none; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .gallery-item {
+    border-radius: 14px; overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block; transition: transform 0.3s;
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item .remove-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(0,0,0,0.6); color: #fff;
+    border: none; border-radius: 50%; width: 26px; height: 26px;
+    font-size: 14px; cursor: pointer; display: none;
+    align-items: center; justify-content: center; line-height: 1;
+    transition: background 0.2s;
+  }
+  .gallery-item:hover .remove-btn { display: flex; }
+  .gallery-item .remove-btn:hover { background: rgba(255,45,107,0.8); }
+  .gallery-item .photo-name {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    padding: 1rem 0.75rem 0.5rem;
+    font-size: 0.75rem; color: rgba(255,255,255,0.85);
+    font-family: 'DM Sans'; font-weight: 500;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .gallery-item:hover .photo-name { opacity: 1; }
+  .gallery-item:hover { transform: scale(1.02); }
+
+  .gallery-empty {
+    grid-column: span 3; text-align: center;
+    padding: 4rem 2rem; color: rgba(255,255,255,0.25);
+    font-size: 1rem; line-height: 2;
+  }
+  .gallery-empty div { font-size: 3rem; margin-bottom: 0.5rem; }
+  .gallery-count {
+    text-align: center; margin-top: 1.2rem;
+    font-size: 0.82rem; color: rgba(255,255,255,0.3);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 999;
+    background: rgba(0,0,0,0.92);
+    align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw; max-height: 85vh;
+    border-radius: 12px; object-fit: contain;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+  .lightbox-close {
+    position: fixed; top: 1.5rem; right: 1.5rem;
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: none; border-radius: 50%;
+    width: 44px; height: 44px; font-size: 1.3rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .lightbox-close:hover { background: rgba(255,45,107,0.6); }
+  .lightbox-nav {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: none; border-radius: 50%;
+    width: 48px; height: 48px; font-size: 1.4rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(255,107,0,0.5); }
+  #lb-prev { left: 1.5rem; }
+  #lb-next { right: 1.5rem; }
+  .lightbox-caption {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.6); font-size: 0.85rem; font-family: 'DM Sans';
+  }
+
+  /* ── REGISTER ── */
+  #register { background: var(--cream); }
+  .register-wrap {
+    max-width: 600px; margin: 0 auto;
+    background: #fff; border-radius: 28px; padding: 3rem;
+    border: 1.5px solid rgba(45,20,0,0.08);
+    box-shadow: 0 30px 80px rgba(255,107,0,0.08);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); opacity: 0.7; margin-bottom: 0.4rem; letter-spacing: 0.02em; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 1.5px solid rgba(45,20,0,0.12); border-radius: 12px;
+    font-size: 0.95rem; font-family: 'DM Sans', sans-serif; color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--saffron);
+    box-shadow: 0 0 0 3px rgba(255,107,0,0.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-submit {
+    width: 100%; padding: 1rem;
+    background: linear-gradient(135deg, var(--saffron), var(--pink));
+    color: #fff; border: none; border-radius: 100px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    margin-top: 0.5rem; letter-spacing: 0.02em;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,45,107,0.3); }
+  .success-msg {
+    display: none; text-align: center; padding: 2rem;
+    color: var(--teal); font-size: 1.1rem; font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 2.5rem 2rem;
+    font-size: 0.875rem;
+  }
+  footer span { color: var(--gold); }
+
+  /* ── DIVIDER ── */
+  .wave-divider { display: block; width: 100%; overflow: hidden; line-height: 0; }
+  .wave-divider svg { display: block; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item:nth-child(1), .gallery-item:nth-child(5) { grid-column: span 2; }
+    .register-wrap { padding: 1.75rem 1.25rem; }
+    .schedule-item { grid-template-columns: 90px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Fresher's Day '26</div>
+  <ul class="nav-links">
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#register">Register</a></li>
+  </ul>
+  <a href="#register" class="nav-cta">Register Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">🎉 Welcome, Freshers 2026!</div>
+  <h1 class="hero-title">Fresher's<br>Day<br>'26</h1>
+  <p class="hero-subtitle">Where new beginnings become unforgettable memories</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="icon icon-saffron">📅</span>
+      <span>15th August 2026</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="icon icon-pink">📍</span>
+      <span>College Auditorium, Main Campus</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="icon icon-teal">🎟️</span>
+      <span>Free Entry for All Students</span>
+    </div>
+  </div>
+  <div class="hero-cta-group">
+    <a href="#register" class="btn-primary">Register Now →</a>
+    <a href="#schedule" class="btn-secondary">View Schedule</a>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<div id="countdown-section">
+  <p class="countdown-label">⏳ Event starts in</p>
+  <div class="countdown-grid">
+    <div class="countdown-unit">
+      <div class="countdown-num" id="cd-days">00</div>
+      <div class="countdown-unit-label">Days</div>
+    </div>
+    <div class="countdown-unit">
+      <div class="countdown-num" id="cd-hours">00</div>
+      <div class="countdown-unit-label">Hours</div>
+    </div>
+    <div class="countdown-unit">
+      <div class="countdown-num" id="cd-mins">00</div>
+      <div class="countdown-unit-label">Minutes</div>
+    </div>
+    <div class="countdown-unit">
+      <div class="countdown-num" id="cd-secs">00</div>
+      <div class="countdown-unit-label">Seconds</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Day plan</p>
+      <h2 class="section-title">Schedule</h2>
+      <p class="section-desc">A day packed with fun, performances, games, and a whole lot of memories.</p>
+    </div>
+    <div class="schedule-grid">
+      <div class="schedule-item reveal">
+        <div class="schedule-time">09:00 AM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Registration & Welcome Check-In <span class="schedule-tag tag-ceremony">Ceremony</span></div>
+          <div class="schedule-note">Collect your wristbands and goody bags at the main gate</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">10:00 AM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Inauguration & Lamp Lighting <span class="schedule-tag tag-ceremony">Ceremony</span></div>
+          <div class="schedule-note">Principal's address & official welcome to the college family</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">11:00 AM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Cultural Performances — Round 1 <span class="schedule-tag tag-perf">Performance</span></div>
+          <div class="schedule-note">Dance, music, and drama by seniors welcoming the new batch</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">01:00 PM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Lunch Break <span class="schedule-tag tag-food">Food</span></div>
+          <div class="schedule-note">Free lunch for all registered freshers at the college canteen</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">02:00 PM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Fun Games & Team Events <span class="schedule-tag tag-game">Games</span></div>
+          <div class="schedule-note">Participate in our hilarious icebreaker games and win prizes</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">04:00 PM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Fresher's Talent Show <span class="schedule-tag tag-perf">Performance</span></div>
+          <div class="schedule-note">Freshers take the stage — sing, dance, perform, or surprise us!</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">06:00 PM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">Mr & Ms Fresher Crown <span class="schedule-tag tag-ceremony">Ceremony</span></div>
+          <div class="schedule-note">The grand crowning ceremony with prizes and photo ops</div>
+        </div>
+      </div>
+      <div class="schedule-item reveal">
+        <div class="schedule-time">07:00 PM</div>
+        <div class="schedule-content">
+          <div class="schedule-event">DJ Night & Closing Party <span class="schedule-tag tag-perf">Performance</span></div>
+          <div class="schedule-note">Dance the night away — the real party starts here!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Activities</p>
+      <h2 class="section-title">Events & Games</h2>
+      <p class="section-desc">Jump in, compete, perform — there's something for everyone.</p>
+    </div>
+    <div class="events-grid">
+      <div class="event-card reveal">
+        <div class="event-icon">🎤</div>
+        <div class="event-name">Fresher's Idol</div>
+        <div class="event-desc">Show off your singing chops in front of a live audience and a panel of judges.</div>
+        <div class="event-detail">🏆 Prize: ₹2,000 + Trophy</div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-icon">💃</div>
+        <div class="event-name">Dance Battle</div>
+        <div class="event-desc">Solo or group — any style flies. Freestyle, classical, hip-hop — just bring the energy.</div>
+        <div class="event-detail">🏆 Prize: ₹3,000 + Certificate</div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-icon">🎭</div>
+        <div class="event-name">Skit & Mime</div>
+        <div class="event-desc">Make 'em laugh, make 'em think — short skits and silent performances welcome.</div>
+        <div class="event-detail">🏆 Prize: ₹1,500 + Gift Hamper</div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-icon">👑</div>
+        <div class="event-name">Mr & Ms Fresher</div>
+        <div class="event-desc">Personality, confidence, and charm — the ultimate fresher pageant of the year.</div>
+        <div class="event-detail">🏆 Prize: Crown + ₹5,000</div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-icon">🎮</div>
+        <div class="event-name">Game Zone</div>
+        <div class="event-desc">Dumb charades, musical chairs, relay races and more wacky games all afternoon.</div>
+        <div class="event-detail">🎁 Spot prizes for winners</div>
+      </div>
+      <div class="event-card reveal">
+        <div class="event-icon">📸</div>
+        <div class="event-name">Selfie Contest</div>
+        <div class="event-desc">Hit the photo booth, strike your best pose, and win the most likes on Instagram.</div>
+        <div class="event-detail">🏆 Prize: ₹1,000 Amazon voucher</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Memories</p>
+      <h2 class="section-title">Gallery</h2>
+      <p class="section-desc">Share your moments — upload your Fresher's Day photos for everyone to see!</p>
+    </div>
+
+    <div style="text-align:center;">
+      <input type="file" id="gallery-file-input" accept="image/*" multiple>
+      <button class="gallery-upload-btn reveal" onclick="document.getElementById('gallery-file-input').click()">
+        📸 Upload Your Photos
+      </button>
+    </div>
+
+    <div class="gallery-grid reveal" id="gallery-grid">
+      <div class="gallery-empty" id="gallery-empty">
+        <div>🖼️</div>
+        <p>No photos yet — be the first to share a memory!</p>
+        <p style="font-size:0.8rem; margin-top:0.3rem;">Click "Upload Your Photos" above</p>
+      </div>
+    </div>
+    <p class="gallery-count" id="gallery-count"></p>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lb-close">✕</button>
+  <button class="lightbox-nav" id="lb-prev">‹</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lightbox-nav" id="lb-next">›</button>
+  <div class="lightbox-caption" id="lb-caption"></div>
+</div>
+
+<!-- REGISTER -->
+<section id="register">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Join the fun</p>
+      <h2 class="section-title">Register Now</h2>
+      <p class="section-desc">Secure your spot — free for all first-year students.</p>
+    </div>
+    <div class="register-wrap reveal">
+      <form id="reg-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Aarav" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Sharma" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>College Email</label>
+          <input type="email" placeholder="aarav@college.edu" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select required>
+              <option value="" disabled selected>Select dept.</option>
+              <option>Computer Science</option>
+              <option>Electronics</option>
+              <option>Mechanical</option>
+              <option>Civil</option>
+              <option>Information Technology</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Event(s) you want to participate in</label>
+          <select>
+            <option value="" disabled selected>Choose an event</option>
+            <option>Fresher's Idol (Singing)</option>
+            <option>Dance Battle</option>
+            <option>Skit & Mime</option>
+            <option>Mr & Ms Fresher</option>
+            <option>Game Zone</option>
+            <option>Selfie Contest</option>
+            <option>Just attending</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Anything you'd like to tell us? (optional)</label>
+          <textarea placeholder="A fun fact about yourself, a talent, or just a hello!"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Register for Fresher's Day '26 🎉</button>
+      </form>
+      <div class="success-msg" id="success-msg">
+        🎊 You're registered! See you at Fresher's Day '26 — it's going to be legendary.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Made with <span>♥</span> for the Class of 2026 · <span>Your College Name</span></p>
+  <p style="margin-top:0.5rem; font-size:0.78rem;">For queries, contact the Cultural Committee · culturalcomm@college.edu</p>
+</footer>
+
+<script>
+  // Countdown
+  const eventDate = new Date('2026-08-15T09:00:00').getTime();
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+    if (diff <= 0) {
+      document.getElementById('countdown-section').innerHTML = '<p style="color:#fff;font-size:1.5rem;font-weight:700;font-family:Abril Fatface">🎉 Fresher\'s Day \'26 is LIVE! Welcome, Freshers!</p>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Form submit
+  document.getElementById('reg-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  });
+
+  // ── GALLERY ──
+  let photos = []; // { src, name }
+  let currentLb = 0;
+
+  const fileInput = document.getElementById('gallery-file-input');
+  const grid = document.getElementById('gallery-grid');
+  const empty = document.getElementById('gallery-empty');
+  const countEl = document.getElementById('gallery-count');
+
+  fileInput.addEventListener('change', function() {
+    const files = Array.from(this.files);
+    if (!files.length) return;
+    files.forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        photos.push({ src: e.target.result, name: file.name.replace(/\.[^.]+$/, '') });
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+    this.value = '';
+  });
+
+  function renderGallery() {
+    grid.innerHTML = '';
+    if (photos.length === 0) {
+      grid.appendChild(empty);
+      countEl.textContent = '';
+      return;
+    }
+    photos.forEach((photo, i) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `
+        <img src="${photo.src}" alt="${photo.name}" loading="lazy">
+        <div class="photo-name">${photo.name}</div>
+        <button class="remove-btn" title="Remove">✕</button>
+      `;
+      item.querySelector('img').addEventListener('click', () => openLightbox(i));
+      item.querySelector('.photo-name').addEventListener('click', () => openLightbox(i));
+      item.querySelector('.remove-btn').addEventListener('click', ev => {
+        ev.stopPropagation();
+        photos.splice(i, 1);
+        renderGallery();
+      });
+      grid.appendChild(item);
+    });
+    countEl.textContent = photos.length + ' photo' + (photos.length !== 1 ? 's' : '') + ' in the gallery';
+  }
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCaption = document.getElementById('lb-caption');
+
+  function openLightbox(i) {
+    currentLb = i;
+    lbImg.src = photos[i].src;
+    lbCaption.textContent = photos[i].name + ' · ' + (i + 1) + ' / ' + photos.length;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.getElementById('lb-prev').addEventListener('click', () => {
+    currentLb = (currentLb - 1 + photos.length) % photos.length;
+    openLightbox(currentLb);
+  });
+  document.getElementById('lb-next').addEventListener('click', () => {
+    currentLb = (currentLb + 1) % photos.length;
+    openLightbox(currentLb);
+  });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
+    if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
+  });
+
+  // Drag-and-drop onto gallery section
+  const gallerySection = document.getElementById('gallery');
+  gallerySection.addEventListener('dragover', e => { e.preventDefault(); gallerySection.style.outline = '2px dashed rgba(255,107,0,0.5)'; });
+  gallerySection.addEventListener('dragleave', () => { gallerySection.style.outline = ''; });
+  gallerySection.addEventListener('drop', e => {
+    e.preventDefault();
+    gallerySection.style.outline = '';
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        photos.push({ src: ev.target.result, name: file.name.replace(/\.[^.]+$/, '') });
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+</script>
+</body>
+</html>
