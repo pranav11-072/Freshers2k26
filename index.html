@@ -701,17 +701,17 @@
         <div class="form-row">
           <div class="form-group">
             <label>First Name</label>
-            <input id="f-fname" type="text" placeholder="Aarav" required>
+            <input id="f-fname" type="text" placeholder="First Name" required>
           </div>
           <div class="form-group">
             <label>Last Name</label>
-            <input id="f-lname" type="text" placeholder="Sharma" required>
+            <input id="f-lname" type="text" placeholder="Last Name" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>USN</label>
-            <input id="f-usn" type="text" placeholder="1NC25CS001" required style="text-transform:uppercase;">
+            <input id="f-usn" type="text" placeholder="1NC24CS001" required style="text-transform:uppercase;">
           </div>
           <div class="form-group">
             <label>Phone Number</label>
@@ -719,8 +719,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label>College Email</label>
-          <input id="f-email" type="email" placeholder="aarav@ncet.edu" required>
+          <label>Email</label>
+          <input id="f-email" type="email" placeholder="Email id" required>
         </div>
         <div class="form-group">
           <label>Department</label>
@@ -853,12 +853,12 @@
     try { localStorage.setItem('fd26_reg', JSON.stringify(registrations)); } catch(e) {}
   }
 
-  var ADMIN_PASS = 'ncet2026';
+  var ADMIN_PASSES = ['Pranav1107', 'Nagendra2102', 'aaroha@cse'];
   var adminUnlocked = false;
 
   function checkPass() {
     var val = document.getElementById('admin-pass').value;
-    if (val === ADMIN_PASS) {
+    if (ADMIN_PASSES.indexOf(val) !== -1) {
       adminUnlocked = true;
       document.getElementById('admin-login').style.display = 'none';
       document.getElementById('admin-err').style.display = 'none';
