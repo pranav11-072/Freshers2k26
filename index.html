@@ -22,7 +22,7 @@
   @keyframes float-bg { 0% { background-position: 0 0, 30px 30px, 15px 45px, 60px 15px; } 100% { background-position: 0 -60px, 30px -30px, 15px -15px, 60px -45px; } }
   .hero-badge { display: inline-block; background: linear-gradient(135deg, var(--gold), var(--saffron)); color: #fff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; padding: 0.4rem 1.2rem; border-radius: 100px; margin-bottom: 1.5rem; animation: pulse-badge 2s ease-in-out infinite; }
   @keyframes pulse-badge { 0%,100% { box-shadow: 0 0 0 0 rgba(255,184,0,0.4); } 50% { box-shadow: 0 0 0 10px rgba(255,184,0,0); } }
-  .hero-title { font-family: 'Abril Fatface', cursive; font-size: clamp(4rem, 12vw, 9rem); line-height: 0.9; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--saffron) 0%, var(--pink) 50%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.4em; }
+  .hero-title { font-family: 'Abril Fatface', cursive; font-size: clamp(4rem, 12vw, 9rem); line-height: 0.9; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--saffron) 0%, var(--pink) 50%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.4em; color: var(--saffron); }
   .hero-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--text); opacity: 0.6; margin-bottom: 2rem; }
   .hero-meta { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
   .hero-cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
@@ -154,12 +154,12 @@
 <nav>
   <div class="nav-logo">Fresher's Day '26</div>
   <ul class="nav-links">
-    <li><a href="#schedule">Schedule</a></li>
-    <li><a href="#events">Events</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#register">Register</a></li>
+    <li><a href="#schedule" onclick="document.getElementById('schedule').scrollIntoView({behavior:'smooth'});return false;">Schedule</a></li>
+    <li><a href="#events" onclick="document.getElementById('events').scrollIntoView({behavior:'smooth'});return false;">Events</a></li>
+    <li><a href="#gallery" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'});return false;">Gallery</a></li>
+    <li><a href="#register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'});return false;">Register</a></li>
   </ul>
-  <a href="#register" class="nav-cta">Register Now</a>
+  <a href="#register" class="nav-cta" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'});return false;">Register Now</a>
 </nav>
 
 <section id="hero">
@@ -172,8 +172,8 @@
     <div class="hero-meta-item"><span class="icon icon-teal">🎟️</span><span>Free Entry for All Students</span></div>
   </div>
   <div class="hero-cta-group">
-    <a href="#register" class="btn-primary">Register Now →</a>
-    <a href="#schedule" class="btn-secondary">View Schedule</a>
+    <a href="#register" class="btn-primary" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'});return false;">Register Now →</a>
+    <a href="#schedule" class="btn-secondary" onclick="document.getElementById('schedule').scrollIntoView({behavior:'smooth'});return false;">View Schedule</a>
   </div>
 </section>
 
