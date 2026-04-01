@@ -433,7 +433,7 @@
   document.addEventListener('DOMContentLoaded', function() {
 
     // COUNTDOWN
-    const eventDate = new Date("April 15, 2026 09:00:00").getTime();
+  const eventDate = new Date("April 15, 2026 09:00:00").getTime();
     function updateCountdown() {
       var diff = eventDate - Date.now();
       if (diff <= 0) { document.getElementById('countdown-section').innerHTML='<p style="color:#fff;font-size:1.5rem;font-weight:700;text-align:center;padding:1rem;">Fresher\'s Day \'26 is LIVE! Welcome!</p>'; return; }
